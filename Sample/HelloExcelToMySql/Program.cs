@@ -2,7 +2,7 @@
 using ExcelToMySql.Excel;
 using ExcelToMySql.MySql;
 
-namespace ExcelToMySql
+namespace HelloExcelToMySql
 {
     class Program
     {
@@ -10,19 +10,18 @@ namespace ExcelToMySql
         {
             // 1. Read excel data and convert meta data.
             ExcelMetaData metaData;
-            ExcelReader.ReadExcel(@"C:\Temp\aa.xlsx", out metaData);
+            ExcelReader.ReadExcel(@".\Excel\Sample.xlsx", out metaData);
 
             // 2. Generate sql(like .sql file) from SqlTable.
             var config = new SqlTableConfiguration
             {
-                TableName = "actor_data"
+                TableName = "Sample"
             };
 
             var table = new SqlTable(metaData, config);
             var query = table.GenerateSql();
 
             // ex
-            System.IO.File.WriteAllText(@".\aa.sql", query);
             Console.WriteLine(query);
         }
     }

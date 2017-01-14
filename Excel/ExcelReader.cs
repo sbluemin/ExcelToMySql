@@ -8,7 +8,7 @@ namespace ExcelToMySql.Excel
     /// <summary>
     /// 엑셀 데이터를 읽어들이는 클래스
     /// </summary>
-    class ExcelReader
+    public class ExcelReader
     {
         /// <summary>
         /// 엑셀에서 컬럼을 읽을 때 무시 할 데이터 포맷
