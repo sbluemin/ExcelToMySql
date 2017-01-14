@@ -7,8 +7,8 @@
     <ProjectGuid>{4746D248-6F6F-48B0-BC20-ED72C12E1827}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OETM</RootNamespace>
-    <AssemblyName>OETM</AssemblyName>
+    <RootNamespace>OfficialETM</RootNamespace>
+    <AssemblyName>OfficialETM</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -31,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -50,7 +52,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Src\ExcelToMySql.csproj">
+    <ProjectReference Include="..\Src\ExcelToMySql.csproj">
       <Project>{e827f0f7-dd29-4672-8aa6-4b338aea134e}</Project>
       <Name>ExcelToMySql</Name>
     </ProjectReference>
