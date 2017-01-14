@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelToMySql", "Src\ExcelTo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{C5421F11-BDD3-4D61-AC20-84E3708D47BB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelToMySqlTests", "Test\ExcelToMySqlTests.csproj", "{9D9126B5-D9A9-4081-A43E-257DFD553FE0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{E827F0F7-DD29-4672-8AA6-4B338AEA134E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E827F0F7-DD29-4672-8AA6-4B338AEA134E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E827F0F7-DD29-4672-8AA6-4B338AEA134E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D9126B5-D9A9-4081-A43E-257DFD553FE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D9126B5-D9A9-4081-A43E-257DFD553FE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D9126B5-D9A9-4081-A43E-257DFD553FE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D9126B5-D9A9-4081-A43E-257DFD553FE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -34,5 +40,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{445612FB-C180-4610-85CF-6857E7A60F02} = {F49A2200-138C-4D77-A406-8A0606A5215B}
 		{E827F0F7-DD29-4672-8AA6-4B338AEA134E} = {FC208CF6-B136-4767-B47E-6A923512627C}
+		{9D9126B5-D9A9-4081-A43E-257DFD553FE0} = {C5421F11-BDD3-4D61-AC20-84E3708D47BB}
 	EndGlobalSection
 EndGlobal
