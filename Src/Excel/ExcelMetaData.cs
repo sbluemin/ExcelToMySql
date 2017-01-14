@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ExcelToMySql.Excel
 {
     /// <summary>
-    /// 엑셀 파일에서 읽어들인 메타 데이터
+    /// Data read from an .xlsx file
     /// </summary>
     public class ExcelMetaData
     {
