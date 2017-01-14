@@ -21,7 +21,7 @@ namespace ExcelToMySql.MySql
         /// Generate 'DROP TABLE' query.
         /// </summary>
         /// <param name="builder"></param>
-        private void NewQuery_DropTable(StringBuilder builder)
+        public void NewQuery_DropTable(StringBuilder builder)
         {
             builder.AppendFormat("DROP TABLE IF EXISTS `{0}`;\n", Configuration.TableName);
         }
@@ -30,7 +30,7 @@ namespace ExcelToMySql.MySql
         /// Generate 'CREATE TABLE' query.
         /// </summary>
         /// <param name="builder"></param>
-        private void NewQuery_CreateTable(StringBuilder builder)
+        public void NewQuery_CreateTable(StringBuilder builder)
         {
             builder.AppendFormat("CREATE TABLE `{0}` (\n", Configuration.TableName);
 
@@ -47,7 +47,7 @@ namespace ExcelToMySql.MySql
         /// Generate 'INSERT' query.
         /// </summary>
         /// <param name="builder"></param>
-        private void NewQuery_AddDatas(StringBuilder builder)
+        public void NewQuery_AddDatas(StringBuilder builder)
         {
             builder.AppendFormat("LOCK TABLES `{0}` WRITE;\n", Configuration.TableName);
             builder.AppendFormat("INSERT IGNORE INTO `{0}` VALUES", Configuration.TableName);
