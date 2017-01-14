@@ -1,0 +1,19 @@
+*.user
+*.vspx
+*.VC.VC.opendb
+*.VC.db
+.vs
+*.dll
+packages
+
+# Debug, Release folder
+**/Debug
+**/Release
+
+# PIDL Compiled files
+DevilCommon/DevilPIDL/*.cs
+
+# Intermediate folders
+**/bin
+**/obj
+**/.vscode
