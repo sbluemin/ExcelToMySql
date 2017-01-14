@@ -21,7 +21,7 @@ namespace HelloExcelToMySql
             var table = new SqlTable(metaData, config);
             var query = table.GenerateSql();
 
-            // ex
+            // Enjoy! :) 
             Console.WriteLine(query);
         }
     }
