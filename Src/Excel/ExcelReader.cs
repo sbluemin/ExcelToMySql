@@ -6,16 +6,20 @@ using Excel;
 namespace ExcelToMySql.Excel
 {
     /// <summary>
-    /// 엑셀 데이터를 읽어들이는 클래스
+    /// A .xlsx to ExcelMetaData converter.
     /// </summary>
     public class ExcelReader
     {
-        /// <summary>
-        /// 엑셀에서 컬럼을 읽을 때 무시 할 데이터 포맷
-        /// </summary>
+        [Obsolete("Not used.")]
         public readonly string[] IgnoreTypes = new string[] { "text", "ref" };
 
-        private static bool ReadColumn(IExcelDataReader reader, ExcelMetaData metaData)
+        /// <summary>
+        /// Read column name from .xlsx file.
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="metaData"></param>
+        /// <returns></returns>
+        private static bool ReadColumnName(IExcelDataReader reader, ExcelMetaData metaData)
         {
             if (!reader.Read())
             {
@@ -24,14 +28,14 @@ namespace ExcelToMySql.Excel
 
             for (int i = 0; i < reader.FieldCount; i++)
             {
-                metaData.ColumnName.Add(reader.GetString(i));
+                metaData.ColumnNames.Add(reader.GetString(i));
             }
 
             return true;
         }
 
         /// <summary>
-        /// 엑셀로부터 데이터와 포맷을 읽어와 메타 데이터화 시킵니다.
+        /// Read .xlsx file and convert to ExcelMetaData.
         /// </summary>
         /// <param name="absoluteFilePath"></param>
         /// <param name="outMetaData"></param>
@@ -48,7 +52,7 @@ namespace ExcelToMySql.Excel
                     {
                         // 컬럼 정보를 읽음
                         excelReader.IsFirstRowAsColumnNames = true;
-                        if (!ReadColumn(excelReader, outMetaData))
+                        if (!ReadColumnName(excelReader, outMetaData))
                         {
                             throw new Exception("Read failed.");
                         }

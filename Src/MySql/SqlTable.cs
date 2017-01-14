@@ -34,12 +34,12 @@ namespace ExcelToMySql.MySql
         {
             builder.AppendFormat("CREATE TABLE `{0}` (\n", Configuration.TableName);
 
-            foreach (var i in MetaData.ColumnName)
+            foreach (var i in MetaData.ColumnNames)
             {
                 builder.AppendFormat("`{0}` {1} NOT NULL,\n", i, Configuration.SqlTypeMap[i.Split('_')[0]]);
             }
 
-            builder.AppendFormat("PRIMARY KEY(`{0}`)\n", MetaData.ColumnName[0]);
+            builder.AppendFormat("PRIMARY KEY(`{0}`)\n", MetaData.ColumnNames[0]);
             builder.AppendFormat(") ENGINE=InnoDB DEFAULT CHARSET=utf8;\n");
         }
 

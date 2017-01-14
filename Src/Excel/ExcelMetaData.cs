@@ -7,7 +7,7 @@ namespace ExcelToMySql.Excel
     /// </summary>
     public class ExcelMetaData
     {
-        public List<string> ColumnName = new List<string>();
+        public List<string> ColumnNames = new List<string>();
         public List<List<object>> Datas = new List<List<object>>();
     }
 }
