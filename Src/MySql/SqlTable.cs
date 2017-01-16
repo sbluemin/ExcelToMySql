@@ -43,6 +43,7 @@ namespace ExcelToMySql.MySql
                     if (i.Contains(j.Key))
                     {
                         builder.AppendFormat("`{0}` {1} NOT NULL,\n", i, j.Value);
+                        break;
                     }
                 }
             }
