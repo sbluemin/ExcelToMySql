@@ -10,6 +10,8 @@ namespace ExcelToMySql.MySql
                  {"short", "smallint(6)"},
                  {"char", "char(1)" },
                  {"byte", "char(1)" },
+                 {"float", "double" },
+                 {"double", "double" },
                  {"text", "varchar(255)"},
                  {"ref", "varchar(255)"},
             };
