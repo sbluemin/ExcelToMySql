@@ -43,7 +43,11 @@ namespace OETM
             try
             {
                 ExcelMetaData metaData;
-                ExcelReader.ReadExcel(absoluteFilePath, out metaData);
+                var excelConfig = new ExcelReaderConfiguration
+                {
+                    IgnoreIfIncludeString = new string[] { "ref", "text" },
+                };
+                ExcelReader.ReadExcel(absoluteFilePath, excelConfig, out metaData);
 
                 var config = new SqlTableConfiguration
                 {

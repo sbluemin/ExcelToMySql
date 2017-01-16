@@ -38,14 +38,6 @@ namespace ExcelToMySql.MySql
             {
                 if(i != null)
                 {
-                    foreach(var j in Configuration.IgnoreIfIncludeString)
-                    {
-                        if (j.Contains(i))
-                        {
-                            goto NextCloumn;
-                        }
-                    }
-
                     foreach (var j in Configuration.SqlTypeMap)
                     {
                         if (i.Contains(j.Key))
