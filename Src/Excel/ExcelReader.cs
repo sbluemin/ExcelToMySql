@@ -10,18 +10,17 @@ namespace ExcelToMySql.Excel
     /// </summary>
     public class ExcelReader
     {
-        [Obsolete("Not used.")]
-        public readonly string[] IgnoreTypes = new string[] { "text", "ref" };
-
         /// <summary>
         /// Read column name from .xlsx file.
         /// </summary>
         /// <param name="reader"></param>
         /// <param name="metaData"></param>
         /// <param name="config"></param>
+        /// <param name="outIgnoreFields"></param>
         /// <returns></returns>
-        private static bool ReadColumnName(IExcelDataReader reader, ExcelMetaData metaData, ExcelReaderConfiguration config)
+        private static bool ReadColumnName(IExcelDataReader reader, ExcelMetaData metaData, ExcelReaderConfiguration config, out List<int> outIgnoreFields)
         {
+            outIgnoreFields = new List<int>();
             if (!reader.Read())
             {
                 return false;
@@ -29,7 +28,27 @@ namespace ExcelToMySql.Excel
 
             for (int i = config.DataEntryPointColumnIndex; i < reader.FieldCount; i++)
             {
-                metaData.ColumnNames.Add(reader.GetString(i));
+                var name = reader.GetString(i);
+                if(name == null)
+                {
+                    outIgnoreFields.Add(i);
+                    continue;
+                }
+
+                var isIgnore = false;
+                foreach (var j in config.IgnoreIfIncludeString)
+                {
+                    if (name.Contains(j))
+                    {
+                        outIgnoreFields.Add(i);
+                        isIgnore = true;
+                    }
+                }
+
+                if(!isIgnore)
+                {
+                    metaData.ColumnNames.Add(name);
+                }
             }
 
             return true;
@@ -72,7 +91,8 @@ namespace ExcelToMySql.Excel
                     }
 
                     // Read column info
-                    if (!ReadColumnName(excelReader, outMetaData, config))
+                    List<int> ignoreFields;
+                    if (!ReadColumnName(excelReader, outMetaData, config, out ignoreFields))
                     {
                         throw new Exception("Read failed.");
                     }
@@ -83,6 +103,11 @@ namespace ExcelToMySql.Excel
                         var row = new List<object>();
                         for (int i = config.DataEntryPointColumnIndex; i < excelReader.FieldCount; i++)
                         {
+                            if(ignoreFields.Contains(i))
+                            {
+                                continue;
+                            }
+
                             row.Add(excelReader.GetValue(i));
                         }
 
