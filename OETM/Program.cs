@@ -12,6 +12,26 @@ namespace OETM
     {
         static StringBuilder _sql = new StringBuilder();
         static object _sqlLockObject = new object();
+        static object _consoleLockObject = new object();
+
+        static void WriteConsole(bool isSuccess, string message)
+        {
+            lock(_consoleLockObject)
+            {
+                if (isSuccess)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine(message);
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(message);
+                    Console.ResetColor();
+                }
+            }
+        }
 
         static void RunGenerateSql_Task(string absoluteFilePath)
         {
@@ -19,19 +39,20 @@ namespace OETM
             {
                 return;
             }
-            
-            ExcelMetaData metaData;
-            ExcelReader.ReadExcel(absoluteFilePath, out metaData);
-
-            var config = new SqlTableConfiguration
-            {
-                TableName = Path.GetFileNameWithoutExtension(absoluteFilePath)
-            };
-
-            var table = new SqlTable(metaData, config);
 
             try
             {
+                ExcelMetaData metaData;
+                ExcelReader.ReadExcel(absoluteFilePath, out metaData);
+
+                var config = new SqlTableConfiguration
+                {
+                    TableName = Path.GetFileNameWithoutExtension(absoluteFilePath),
+                    IsIgnoreNotFoundTypeColumn = true,
+                };
+
+                var table = new SqlTable(metaData, config);
+
                 var query = table.GenerateSql();
 
                 lock (_sqlLockObject)
@@ -41,21 +62,19 @@ namespace OETM
                     _sql.Append(query);
                 }
 
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("Complete generate! \"{0}\"", absoluteFilePath);
-                Console.ResetColor();
+                WriteConsole(true, string.Format("Success! \"{0}\"", absoluteFilePath));
             }
             catch(NotFoundTypeException e)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Failed! \"{0}\" -> \"{1}\"", absoluteFilePath, e.Message);
-                Console.ResetColor();
+                WriteConsole(false, string.Format("Failed! \"{0}\" -> \"{1}\"", absoluteFilePath, e.Message));
             }
             catch(NotMappedTypeException e)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Failed! \"{0}\" -> \"{1}\"", absoluteFilePath, e.Message);
-                Console.ResetColor();
+                WriteConsole(false, string.Format("Failed! \"{0}\" -> \"{1}\"", absoluteFilePath, e.Message));
+            }
+            catch (Exception e)
+            {
+                WriteConsole(false, string.Format("Failed! \"{0}\" \"{1}\"", absoluteFilePath, e.Message));
             }
         }
 

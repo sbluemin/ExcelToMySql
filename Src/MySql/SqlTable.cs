@@ -49,7 +49,7 @@ namespace ExcelToMySql.MySql
                         }
                     }
 
-                    if(!isAddedColumn)
+                    if(!isAddedColumn && !Configuration.IsIgnoreNotFoundTypeColumn)
                     {
                         throw new NotFoundTypeException(i);
                     }

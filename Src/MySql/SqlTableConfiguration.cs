@@ -9,6 +9,7 @@ namespace ExcelToMySql.MySql
                  {"int", "int(11)"},
                  {"short", "smallint(6)"},
                  {"char", "char(1)" },
+                 {"bool", "int(11)" },
                  {"byte", "char(1)" },
                  {"float", "double" },
                  {"double", "double" },
@@ -25,5 +26,7 @@ namespace ExcelToMySql.MySql
         /// The name of the table to be created in mysql.
         /// </summary>
         public string TableName;
+
+        public bool IsIgnoreNotFoundTypeColumn = false;
     }
 }
