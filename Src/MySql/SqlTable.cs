@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
+using System.Linq;
 using ExcelToMySql.Excel;
 
 namespace ExcelToMySql.MySql
@@ -9,9 +11,9 @@ namespace ExcelToMySql.MySql
     public class SqlTable
     {
         public readonly ExcelMetaData MetaData;
-        public readonly SqlTableConfiguration Configuration;
+        public readonly Configuration Configuration;
 
-        public SqlTable(ExcelMetaData metaData, SqlTableConfiguration config)
+        public SqlTable(ExcelMetaData metaData, Configuration config)
         {
             MetaData = metaData;
             Configuration = config;
@@ -36,24 +38,13 @@ namespace ExcelToMySql.MySql
 
             foreach (var i in MetaData.ColumnNames)
             {
-                if(i != null)
+                foreach (var j in Configuration.SqlTypeMap)
                 {
-                    foreach (var j in Configuration.SqlTypeMap)
+                    if (i.Contains(j.Key))
                     {
-                        if (i.Contains(j.Key))
-                        {
-                            builder.AppendFormat("`{0}` {1} NOT NULL,\n", i, j.Value);
-                            goto NextCloumn;
-                        }
-                    }
-
-                    if(!Configuration.IsIgnoreNotFoundTypeColumn)
-                    {
-                        throw new NotFoundTypeException(i);
+                        builder.AppendFormat("`{0}` {1} NOT NULL,\n", i, j.Value);
                     }
                 }
-
-                NextCloumn:;
             }
 
             builder.AppendFormat("PRIMARY KEY(`{0}`)\n", MetaData.ColumnNames[0]);
@@ -80,22 +71,50 @@ namespace ExcelToMySql.MySql
                     {
                         if (MetaData.Datas[i][j] is string)
                         {
-                            builder.AppendFormat("'{0}'", MetaData.Datas[i][j]);
+                            if (MetaData.Datas[i][j] == null)
+                            {
+                                builder.AppendFormat("'{0}'", "null");
+                            }
+                            else
+                            {
+                                builder.AppendFormat("'{0}'", MetaData.Datas[i][j]);
+                            }
                         }
                         else
                         {
-                            builder.AppendFormat("{0}", MetaData.Datas[i][j]);
+                            if (MetaData.Datas[i][j] == null)
+                            {
+                                builder.AppendFormat("{0}", "0");
+                            }
+                            else
+                            {
+                                builder.AppendFormat("{0}", MetaData.Datas[i][j]);
+                            }
                         }
                     }
                     else
                     {
                         if (MetaData.Datas[i][j] is string)
                         {
-                            builder.AppendFormat("'{0},'", MetaData.Datas[i][j]);
+                            if (MetaData.Datas[i][j] == null)
+                            {
+                                builder.AppendFormat("'{0},'", "null");
+                            }
+                            else
+                            {
+                                builder.AppendFormat("'{0},'", MetaData.Datas[i][j]);
+                            }
                         }
                         else
                         {
-                            builder.AppendFormat("{0},", MetaData.Datas[i][j]);
+                            if (MetaData.Datas[i][j] == null)
+                            {
+                                builder.AppendFormat("{0},", 0);
+                            }
+                            else
+                            {
+                                builder.AppendFormat("{0},", MetaData.Datas[i][j]);
+                            }
                         }
                     }
                 }

@@ -54,12 +54,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration.cs" />
     <Compile Include="Excel\ExcelMetaData.cs" />
     <Compile Include="Excel\ExcelReader.cs" />
-    <Compile Include="Excel\ExcelReaderConfiguration.cs" />
-    <Compile Include="MySql\Exceptions.cs" />
+    <Compile Include="Exceptions.cs" />
     <Compile Include="MySql\SqlTable.cs" />
-    <Compile Include="MySql\SqlTableConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

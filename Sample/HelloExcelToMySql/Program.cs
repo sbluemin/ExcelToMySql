@@ -1,4 +1,5 @@
 ﻿using System;
+using ExcelToMySql;
 using ExcelToMySql.Excel;
 using ExcelToMySql.MySql;
 
@@ -13,7 +14,7 @@ namespace HelloExcelToMySql
             ExcelReader.ReadExcel(@".\Excel\Sample.xlsx", out metaData);
 
             // 2. Generate sql(like .sql file) from SqlTable.
-            var config = new SqlTableConfiguration
+            var config = new Configuration
             {
                 TableName = "Sample"
             };

@@ -1,10 +1,19 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using Excel;
 
 namespace ExcelToMySql.Excel
 {
+    public static class KeyValuePairExtensions
+    {
+        public static bool IsNull<T, TU>(this KeyValuePair<T, TU> pair)
+        {
+            return pair.Equals(new KeyValuePair<T, TU>());
+        }
+    }
+
     /// <summary>
     /// A .xlsx to ExcelMetaData converter.
     /// </summary>
@@ -18,7 +27,7 @@ namespace ExcelToMySql.Excel
         /// <param name="config"></param>
         /// <param name="outIgnoreFields"></param>
         /// <returns></returns>
-        private static bool ReadColumnName(IExcelDataReader reader, ExcelMetaData metaData, ExcelReaderConfiguration config, out List<int> outIgnoreFields)
+        private static bool ReadColumnName(IExcelDataReader reader, ExcelMetaData metaData, Configuration config, out List<int> outIgnoreFields)
         {
             outIgnoreFields = new List<int>();
             if (!reader.Read())
@@ -29,26 +38,52 @@ namespace ExcelToMySql.Excel
             for (int i = config.DataEntryPointColumnIndex; i < reader.FieldCount; i++)
             {
                 var name = reader.GetString(i);
-                if(name == null)
+
+                // 컬럼이 null일 경우 무시
+                if (name == null)
                 {
                     outIgnoreFields.Add(i);
                     continue;
                 }
 
-                var isIgnore = false;
+                // 특정 문자열이 포함 된 필드 무시
                 foreach (var j in config.IgnoreIfIncludeString)
                 {
                     if (name.Contains(j))
                     {
                         outIgnoreFields.Add(i);
-                        isIgnore = true;
+                        continue;
                     }
                 }
 
-                if(!isIgnore)
+                // 타입이 존재하지 않는 필드 무시
+                var isNotFoundType = false;
+                foreach (var j in config.SqlTypeMap)
                 {
-                    metaData.ColumnNames.Add(name);
+                    if (name.Contains(j.Key))
+                    {
+                        continue;
+                    }
                 }
+
+                if(isNotFoundType)
+                {
+                    if(!config.IsIgnoreNotFoundTypeColumn)
+                    {
+                        throw new NotFoundTypeException(name);
+                    }
+                    else
+                    {
+                        outIgnoreFields.Add(i);
+                        continue;
+                    }
+                }
+
+                // 컬럼 공백 제거
+                name = name.Trim();
+
+                // 컬럼 추가
+                metaData.ColumnNames.Add(name);
             }
 
             return true;
@@ -62,7 +97,7 @@ namespace ExcelToMySql.Excel
         /// <returns></returns>
         public static void ReadExcel(string absoluteFilePath, out ExcelMetaData outMetaData)
         {
-            var config = new ExcelReaderConfiguration();
+            var config = new Configuration();
             ReadExcel(absoluteFilePath, config, out outMetaData);
         }
 
@@ -73,7 +108,7 @@ namespace ExcelToMySql.Excel
         /// <param name="config"></param>
         /// <param name="outMetaData"></param>
         /// <returns></returns>
-        public static void ReadExcel(string absoluteFilePath, ExcelReaderConfiguration config, out ExcelMetaData outMetaData)
+        public static void ReadExcel(string absoluteFilePath, Configuration config, out ExcelMetaData outMetaData)
         {
             outMetaData = new ExcelMetaData();
 
@@ -103,12 +138,33 @@ namespace ExcelToMySql.Excel
                         var row = new List<object>();
                         for (int i = config.DataEntryPointColumnIndex; i < excelReader.FieldCount; i++)
                         {
+                            // 무시되는 필드는 건너뛴다.
                             if(ignoreFields.Contains(i))
                             {
                                 continue;
                             }
 
-                            row.Add(excelReader.GetValue(i));
+                            var value = excelReader.GetValue(i);
+                            if(value == null)
+                            {
+                                // Set default data if value is null
+                                foreach(var j in config.YourStringType)
+                                {
+                                    if(outMetaData.ColumnNames[i].Contains(j))
+                                    {
+                                        value = "null";
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        value = 0;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            // Add data
+                            row.Add(value);
                         }
 
                         outMetaData.Datas.Add(row);

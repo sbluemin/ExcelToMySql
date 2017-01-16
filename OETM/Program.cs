@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using ExcelToMySql;
 using ExcelToMySql.Excel;
 using ExcelToMySql.MySql;
 
@@ -13,6 +14,8 @@ namespace OETM
         static StringBuilder _sql = new StringBuilder();
         static object _sqlLockObject = new object();
         static object _consoleLockObject = new object();
+
+        static string _tableNamePrefix;
 
         static void WriteConsole(bool isSuccess, string message)
         {
@@ -43,15 +46,16 @@ namespace OETM
             try
             {
                 ExcelMetaData metaData;
-                var excelConfig = new ExcelReaderConfiguration
+                var excelConfig = new Configuration
                 {
                     IgnoreIfIncludeString = new string[] { "ref", "text" },
+                    YourStringType = new string[] {"ref", "text"},
                 };
                 ExcelReader.ReadExcel(absoluteFilePath, excelConfig, out metaData);
 
-                var config = new SqlTableConfiguration
+                var config = new Configuration
                 {
-                    TableName = Path.GetFileNameWithoutExtension(absoluteFilePath),
+                    TableName = _tableNamePrefix + Path.GetFileNameWithoutExtension(absoluteFilePath),
                     IsIgnoreNotFoundTypeColumn = true,
                 };
 
@@ -89,10 +93,15 @@ namespace OETM
 
         static int Main(string[] args)
         {
-            if(args.Length <= 0 || args.Length > 1)
+            if(args.Length <= 0)
             {
                 WriteInvalidOption();
                 return -1;
+            }
+
+            if(args.Length > 1)
+            {
+                _tableNamePrefix = args[1];
             }
 
             if(Path.GetFileName(args[0]).CompareTo(@"*") == 0)

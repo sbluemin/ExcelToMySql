@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ExcelToMySql.MySql
+namespace ExcelToMySql
 {
     public class NotMappedTypeException : Exception
     {
