@@ -38,13 +38,20 @@ namespace ExcelToMySql.MySql
             {
                 if(i != null)
                 {
+                    var isAddedColumn = false;
                     foreach (var j in Configuration.SqlTypeMap)
                     {
                         if (i.Contains(j.Key))
                         {
                             builder.AppendFormat("`{0}` {1} NOT NULL,\n", i, j.Value);
+                            isAddedColumn = true;
                             break;
                         }
+                    }
+
+                    if(!isAddedColumn)
+                    {
+                        throw new NotFoundTypeException(i);
                     }
                 }
             }

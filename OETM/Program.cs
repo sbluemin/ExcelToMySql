@@ -29,16 +29,34 @@ namespace OETM
             };
 
             var table = new SqlTable(metaData, config);
-            var query = table.GenerateSql();
 
-            lock (_sqlLockObject)
+            try
             {
-                _sql.Append("\n");
-                _sql.Append("\n");
-                _sql.Append(query);
-            }
+                var query = table.GenerateSql();
 
-            Console.WriteLine("Complete generate! \"{0}\"", absoluteFilePath); 
+                lock (_sqlLockObject)
+                {
+                    _sql.Append("\n");
+                    _sql.Append("\n");
+                    _sql.Append(query);
+                }
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Complete generate! \"{0}\"", absoluteFilePath);
+                Console.ResetColor();
+            }
+            catch(NotFoundTypeException e)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Failed! \"{0}\" -> \"{1}\"", absoluteFilePath, e.Message);
+                Console.ResetColor();
+            }
+            catch(NotMappedTypeException e)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Failed! \"{0}\" -> \"{1}\"", absoluteFilePath, e.Message);
+                Console.ResetColor();
+            }
         }
 
         static void WriteInvalidOption()
