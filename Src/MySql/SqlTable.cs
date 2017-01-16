@@ -36,14 +36,14 @@ namespace ExcelToMySql.MySql
 
             foreach (var i in MetaData.ColumnNames)
             {
-                string mappedSqlType;
-                string type = i.Split('_')[0];
-                if (!Configuration.SqlTypeMap.TryGetValue(type, out mappedSqlType))
+                foreach(var j in Configuration.SqlTypeMap)
                 {
-                    throw new NotMappedTypeException(type, mappedSqlType);
+                    if (i.Contains(j.Key))
+                    {
+                        builder.AppendFormat("`{0}` {1} NOT NULL,\n", i, j.Value);
+                        break;
+                    }
                 }
-
-                builder.AppendFormat("`{0}` {1} NOT NULL,\n", i, mappedSqlType);
             }
 
             builder.AppendFormat("PRIMARY KEY(`{0}`)\n", MetaData.ColumnNames[0]);
