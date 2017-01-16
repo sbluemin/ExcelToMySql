@@ -18,6 +18,11 @@ namespace ExcelToMySql.MySql
             };
 
         /// <summary>
+        /// Ignore if include specify string.
+        /// </summary>
+        public readonly string[] IgnoreIfIncludeString = new string[] { };
+
+        /// <summary>
         /// Mapping your custom field type(.xlsx) to sql type.
         /// </summary>
         public readonly Dictionary<string, string> SqlTypeMap = _defaultSqlTypeMap;

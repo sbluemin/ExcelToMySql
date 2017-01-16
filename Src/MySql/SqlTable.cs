@@ -38,22 +38,30 @@ namespace ExcelToMySql.MySql
             {
                 if(i != null)
                 {
-                    var isAddedColumn = false;
+                    foreach(var j in Configuration.IgnoreIfIncludeString)
+                    {
+                        if (j.Contains(i))
+                        {
+                            goto NextCloumn;
+                        }
+                    }
+
                     foreach (var j in Configuration.SqlTypeMap)
                     {
                         if (i.Contains(j.Key))
                         {
                             builder.AppendFormat("`{0}` {1} NOT NULL,\n", i, j.Value);
-                            isAddedColumn = true;
-                            break;
+                            goto NextCloumn;
                         }
                     }
 
-                    if(!isAddedColumn && !Configuration.IsIgnoreNotFoundTypeColumn)
+                    if(!Configuration.IsIgnoreNotFoundTypeColumn)
                     {
                         throw new NotFoundTypeException(i);
                     }
                 }
+
+                NextCloumn:;
             }
 
             builder.AppendFormat("PRIMARY KEY(`{0}`)\n", MetaData.ColumnNames[0]);

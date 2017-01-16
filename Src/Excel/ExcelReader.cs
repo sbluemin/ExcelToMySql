@@ -10,9 +10,6 @@ namespace ExcelToMySql.Excel
     /// </summary>
     public class ExcelReader
     {
-        [Obsolete("Not used.")]
-        public readonly string[] IgnoreTypes = new string[] { "text", "ref" };
-
         /// <summary>
         /// Read column name from .xlsx file.
         /// </summary>
