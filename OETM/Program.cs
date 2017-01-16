@@ -25,7 +25,7 @@ namespace OETM
 
             var config = new SqlTableConfiguration
             {
-                TableName = "Sample"
+                TableName = Path.GetFileNameWithoutExtension(absoluteFilePath)
             };
 
             var table = new SqlTable(metaData, config);
@@ -37,6 +37,8 @@ namespace OETM
                 _sql.Append("\n");
                 _sql.Append(query);
             }
+
+            Console.WriteLine("Complete generate! \"{0}\"", absoluteFilePath); 
         }
 
         static void WriteInvalidOption()
