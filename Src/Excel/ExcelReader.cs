@@ -183,6 +183,16 @@ namespace ExcelToMySql.Excel
 
                     // 임시로 넣어진 null 컬럼을 제거 한다.
                     outMetaData.ColumnNames.RemoveAll(e => e == "null");
+
+                    // 중복 키를 찾는다.
+                    var duplicateKeys = outMetaData.ColumnNames.GroupBy(x => x)
+                        .Where(group => group.Count() > 1)
+                        .Select(group => group.Key);
+
+                    if(duplicateKeys.ToList().Count > 0)
+                    {
+                        throw new DuplicateColumnException(duplicateKeys.ToList());
+                    }
                 }
             }
         }

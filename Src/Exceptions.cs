@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace ExcelToMySql
 {
@@ -14,5 +16,23 @@ namespace ExcelToMySql
         public NotFoundTypeException(string yourColumnName)
             : base(string.Format("Not found type : \"{0}\"", yourColumnName))
         { }
+    }
+
+    public class DuplicateColumnException : Exception
+    {
+        public readonly string DupMessage;
+
+        public DuplicateColumnException(List<string> duplicatedColumns)
+        {
+            var sb = new StringBuilder();
+            sb.Append("Duplicate coulmn:");
+
+            foreach (var i in duplicatedColumns)
+            {
+                sb.AppendFormat(" {0}", i);
+            }
+
+            DupMessage = sb.ToString();
+        }
     }
 }

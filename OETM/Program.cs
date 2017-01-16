@@ -81,6 +81,10 @@ namespace OETM
             {
                 WriteConsole(false, string.Format("Failed! \"{0}\" -> \"{1}\"", absoluteFilePath, e.Message));
             }
+            catch(DuplicateColumnException e)
+            {
+                WriteConsole(false, string.Format("Failed! \"{0}\"", e.DupMessage));
+            }
             catch (Exception e)
             {
                 WriteConsole(false, string.Format("Failed! \"{0}\" \"{1}\"", absoluteFilePath, e.Message));
