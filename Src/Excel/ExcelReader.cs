@@ -42,8 +42,10 @@ namespace ExcelToMySql.Excel
                 // 컬럼이 null일 경우 무시
                 if (name == null)
                 {
+                    // 데이터를 읽을때 필드수가 모자라서 인덱스 오버플로우 에러가 나므로 임시로 넣고 뒤에서 지운다.
+                    name = "null";
                     outIgnoreFields.Add(i);
-                    continue;
+                    goto Next;
                 }
 
                 // 특정 문자열이 포함 된 필드 무시
@@ -51,18 +53,19 @@ namespace ExcelToMySql.Excel
                 {
                     if (name.Contains(j))
                     {
+                        name = "null";
                         outIgnoreFields.Add(i);
-                        continue;
+                        goto Next;
                     }
                 }
 
                 // 타입이 존재하지 않는 필드 무시
-                var isNotFoundType = false;
+                var isNotFoundType = true;
                 foreach (var j in config.SqlTypeMap)
                 {
                     if (name.Contains(j.Key))
                     {
-                        continue;
+                        isNotFoundType = false;
                     }
                 }
 
@@ -74,13 +77,16 @@ namespace ExcelToMySql.Excel
                     }
                     else
                     {
+                        name = "null";
                         outIgnoreFields.Add(i);
-                        continue;
+                        goto Next;
                     }
                 }
 
                 // 컬럼 공백 제거
                 name = name.Trim();
+
+                Next:
 
                 // 컬럼 추가
                 metaData.ColumnNames.Add(name);
@@ -148,18 +154,23 @@ namespace ExcelToMySql.Excel
                             if(value == null)
                             {
                                 // Set default data if value is null
+                                var isString = false;
                                 foreach(var j in config.YourStringType)
                                 {
                                     if(outMetaData.ColumnNames[i].Contains(j))
                                     {
-                                        value = "null";
+                                        isString = true;
                                         break;
                                     }
-                                    else
-                                    {
-                                        value = 0;
-                                        break;
-                                    }
+                                }
+
+                                if(isString)
+                                {
+                                    value = "null";
+                                }
+                                else
+                                {
+                                    value = 0;
                                 }
                             }
 
@@ -169,6 +180,9 @@ namespace ExcelToMySql.Excel
 
                         outMetaData.Datas.Add(row);
                     }
+
+                    // 임시로 넣어진 null 컬럼을 제거 한다.
+                    outMetaData.ColumnNames.RemoveAll(e => e == "null");
                 }
             }
         }

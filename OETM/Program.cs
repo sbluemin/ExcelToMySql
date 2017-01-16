@@ -49,7 +49,8 @@ namespace OETM
                 var excelConfig = new Configuration
                 {
                     IgnoreIfIncludeString = new string[] { "ref", "text" },
-                    YourStringType = new string[] {"ref", "text"},
+                    YourStringType = new string[] { "ref", "text" },
+                    IsIgnoreNotFoundTypeColumn = true,
                 };
                 ExcelReader.ReadExcel(absoluteFilePath, excelConfig, out metaData);
 
