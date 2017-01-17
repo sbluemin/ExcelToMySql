@@ -52,7 +52,7 @@ namespace OETM
                     IsIgnoreNotFoundTypeColumn = true,
                     IgnoreIfIncludeString = new string[] { "ref", "text" },
                     YourStringType = new string[] { "ref", "text" },
-                    MultiKeyTableName = new string[] { _tableNamePrefix + Path.GetFileNameWithoutExtension(absoluteFilePath) },
+                    MultiKeyTableName = new string[] { _tableNamePrefix + "actor_data" },
                 };
                 ExcelReader.ReadExcel(absoluteFilePath, config, out metaData);
 
