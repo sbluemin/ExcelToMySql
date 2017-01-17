@@ -11,7 +11,7 @@ namespace ExcelToMySql
             {
                  {"int", "int(11)"},
                  {"short", "smallint(6)"},
-                 {"char", "char(1)" },
+                 {"char", "smallint(6)" },
                  {"bool", "int(11)" },
                  {"byte", "char(1)" },
                  {"float", "double" },
