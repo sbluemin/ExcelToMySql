@@ -46,22 +46,17 @@ namespace OETM
             try
             {
                 ExcelMetaData metaData;
-                var excelConfig = new Configuration
-                {
-                    IgnoreIfIncludeString = new string[] { "ref", "text" },
-                    YourStringType = new string[] { "ref", "text" },
-                    IsIgnoreNotFoundTypeColumn = true,
-                };
-                ExcelReader.ReadExcel(absoluteFilePath, excelConfig, out metaData);
-
                 var config = new Configuration
                 {
                     TableName = _tableNamePrefix + Path.GetFileNameWithoutExtension(absoluteFilePath),
                     IsIgnoreNotFoundTypeColumn = true,
+                    IgnoreIfIncludeString = new string[] { "ref", "text" },
+                    YourStringType = new string[] { "ref", "text" },
+                    MultiKeyTableName = new string[] { _tableNamePrefix + Path.GetFileNameWithoutExtension(absoluteFilePath) },
                 };
+                ExcelReader.ReadExcel(absoluteFilePath, config, out metaData);
 
                 var table = new SqlTable(metaData, config);
-
                 var query = table.GenerateSql();
 
                 lock (_sqlLockObject)

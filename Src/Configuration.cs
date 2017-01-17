@@ -32,6 +32,8 @@ namespace ExcelToMySql
 
         public string[] YourStringType = new string[] { };
 
+        public string[] MultiKeyTableName = new string[] { };
+
         public bool IsIgnoreNotFoundTypeColumn = false;
 
         /// <summary>

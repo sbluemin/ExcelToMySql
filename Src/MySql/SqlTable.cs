@@ -48,6 +48,18 @@ namespace ExcelToMySql.MySql
                 }
             }
 
+            // 멀티키
+            foreach(var i in Configuration.MultiKeyTableName)
+            {
+                if(Configuration.TableName.CompareTo(i) == 0)
+                {
+                    builder.AppendFormat("PRIMARY KEY(`{0}`, `{1}`)\n", MetaData.ColumnNames[0], MetaData.ColumnNames[1]);
+                    builder.AppendFormat(") ENGINE=InnoDB DEFAULT CHARSET=utf8;\n");
+                    return;
+                }
+            }
+
+            // 단일키
             builder.AppendFormat("PRIMARY KEY(`{0}`)\n", MetaData.ColumnNames[0]);
             builder.AppendFormat(") ENGINE=InnoDB DEFAULT CHARSET=utf8;\n");
         }
