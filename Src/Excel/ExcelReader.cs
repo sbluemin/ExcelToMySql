@@ -191,7 +191,7 @@ namespace ExcelToMySql.Excel
 
                     if(duplicateKeys.ToList().Count > 0)
                     {
-                        throw new DuplicateColumnException(duplicateKeys.ToList());
+                        throw new DuplicateColumnException(absoluteFilePath, duplicateKeys.ToList());
                     }
                 }
             }

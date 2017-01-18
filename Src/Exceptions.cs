@@ -22,10 +22,10 @@ namespace ExcelToMySql
     {
         public readonly string DupMessage;
 
-        public DuplicateColumnException(List<string> duplicatedColumns)
+        public DuplicateColumnException(string file, List<string> duplicatedColumns)
         {
             var sb = new StringBuilder();
-            sb.Append("Duplicate coulmn:");
+            sb.AppendFormat("\"{0}\" Duplicate coulmn:", file);
 
             foreach (var i in duplicatedColumns)
             {
